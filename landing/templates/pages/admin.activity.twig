@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Admin!{% endblock %}
+
+{% block body %}
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">URL</th>
+      <th scope="col">Кол-во визитов</th>
+      <th scope="col">Последний визит</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for item in result %}
+      <tr>
+        <th scope="row">{{item.id}}</th>
+        <td>{{item.url}}</td>
+        <td>{{item.hits}}</td>
+        <td>{{item.last_date}}</td>
+      </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    {% for i in 1..total_pages+1 %}
+        <li class="page-item"><a class="page-link" href="/admin/activity?page={{i}}">{{i}}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+
+{% endblock %}

@@ -19,7 +19,8 @@ class PingMethod implements JsonRpcMethodInterface
       if(!is_null($paramList)){
 
         $resp = FALSE;
-        $url = $paramList['url'];
+        // $url = $paramList['url'];
+        $url = explode("?", $paramList['url'])[0];
         $key = $paramList['key'];
 
         if($key == 'wowItsSoSecret'){

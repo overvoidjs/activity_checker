@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 use App\Services\SecurityService;
 use App\Services\PingService;
 
@@ -57,7 +58,7 @@ class PagesController extends AbstractController
     /**
      * @Route("/admin/activity", name="admin_activity_page")
      */
-    public function admin_activity_page(): Response
+    public function admin_activity_page(Request $request): Response
     {
       if(!$this->is_login){
         throw $this->createNotFoundException();
@@ -68,14 +69,27 @@ class PagesController extends AbstractController
       if(is_array($result) && isset($result['result'])){
         $result = $result['result'];
 
+
+        $limit = 2;
+        $page = $request->query->get('page');
+
+        if($page > 0){
+          $page = $page - 1;
+        }
+
+        $offset = $limit * $page;
+        $total_pages = count($result) / $limit;
+
+        $result = array_slice($result, $offset, $limit);
+
       } else {
         $result = [];
       }
 
 
-
-        return $this->render('pages/index.html.twig', [
-            'controller_name' => 'PagesController',
+        return $this->render('pages/admin.activity.twig', [
+            'result' => $result,
+            'total_pages' => $total_pages
         ]);
     }
 }
