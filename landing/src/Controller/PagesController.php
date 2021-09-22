@@ -24,7 +24,6 @@ class PagesController extends AbstractController
     public function home_page(): Response
     {
 
-
         return $this->render('pages/index.html.twig', [
             'controller_name' => 'PagesController',
         ]);
@@ -34,6 +33,16 @@ class PagesController extends AbstractController
      * @Route("/about", name="about_page")
      */
     public function about_page(): Response
+    {
+        return $this->render('pages/index.html.twig', [
+            'controller_name' => 'PagesController',
+        ]);
+    }
+
+    /**
+     * @Route("/blog", name="blog_page")
+     */
+    public function blog_page(): Response
     {
         return $this->render('pages/index.html.twig', [
             'controller_name' => 'PagesController',
