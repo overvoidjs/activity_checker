@@ -1,0 +1,28 @@
+version: '2'
+services:
+    landing_php:
+        build: ./php-fpm
+        restart: always
+        volumes:
+            - ./landing:/var/www/landing
+        container_name: "landing_php"
+    activity_php:
+        build: ./php-fpm
+        restart: always
+        volumes:
+            - ./activity:/var/www/activity
+        container_name: "activity_php"
+    web:
+        image: nginx:latest
+        restart: always
+        ports:
+            - "7654:80"
+            - "6543:81"
+        volumes:
+            - ./landing:/var/www/landing
+            - ./activity:/var/www/activity
+            - ./nginx/dev.conf:/etc/nginx/conf.d/default.conf
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - landing_php
+            - activity_php

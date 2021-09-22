@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# имя функции для запуска
+FUNCTION=
+if [ ! -z $1 ]; then
+    FUNCTION="$1"
+fi
+
+showHelp(){
+  echo -e "init - используйте для инициализации проекта"
+  echo -e "start - используйте для запуска проекта"
+  echo -e "stop - используйте для остановки проекта"
+}
+
+init(){
+
+  docker-compose up -d
+
+  echo -e "Сервисы подняты"
+
+  cd landing
+  sudo composer install
+
+  echo -e "Зависимости лендинга установлены"
+
+  cd ../activity
+  sudo composer install
+
+  echo -e "Зависимости приложения установлены"
+
+  CONTAINER_LAND=$(docker ps -qf name=landing_php)
+  CONTAINER_ACTIV=$(docker ps -qf name=activity_php)
+
+  docker exec -it $CONTAINER_ACTIV php activity/bin/console doctrine:database:create
+  docker exec -it $CONTAINER_ACTIV php activity/bin/console doctrine:migrations:migrate
+
+  sudo chmod -R 777 ./var
+
+  echo -e "База данных создана"
+
+}
+
+stop(){
+  docker stop $(docker ps -a -q)
+}
+
+start(){
+  docker-compose up -d
+}
+
+clear(){
+  docker image prune
+  docker volume prune
+  docker container prune
+}
+
+
+if [ ! -z $(type -t $FUNCTION | grep function) ]; then
+     $1
+ else
+     showHelp
+fi
