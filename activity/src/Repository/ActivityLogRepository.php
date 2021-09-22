@@ -43,4 +43,21 @@ class ActivityLogRepository extends ServiceEntityRepository
 
       return $log->getId();
     }
+
+
+    public function get_all(){
+      $conn = $this->getEntityManager()->getConnection();
+
+      $sql = '
+      SELECT *
+      FROM activity_log
+      ';
+
+      $stmt = $conn->prepare($sql);
+      $stmt->execute();
+
+      $data = $stmt->fetchAll();
+
+      return $data;
+    }
 }

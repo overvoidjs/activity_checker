@@ -18,13 +18,17 @@ class PingMethod implements JsonRpcMethodInterface
 
       if(!is_null($paramList)){
 
+        $resp = FALSE;
         $url = $paramList['url'];
+        $key = $paramList['key'];
 
-        try {
-          $this->activityLogRepository->update_or_create($url);
-          $resp = TRUE;
-        } catch (\Exception $e) {
-          $resp = $e;
+        if($key == 'wowItsSoSecret'){
+          try {
+            $this->activityLogRepository->update_or_create($url);
+            $resp = TRUE;
+          } catch (\Exception $e) {
+            $resp = FALSE;
+          }
         }
 
         return $resp;

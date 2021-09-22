@@ -13,6 +13,7 @@ class PagesController extends AbstractController
 
     public function __construct(SecurityService $securityService, PingService $pingService){
       $this->is_login = $securityService->is_login();
+      $this->pingService = $pingService;
       $pingService->send();
     }
 
@@ -61,6 +62,17 @@ class PagesController extends AbstractController
       if(!$this->is_login){
         throw $this->createNotFoundException();
       }
+
+      $result = json_decode($this->pingService->get(), true);
+
+      if(is_array($result) && isset($result['result'])){
+        $result = $result['result'];
+
+      } else {
+        $result = [];
+      }
+
+
 
         return $this->render('pages/index.html.twig', [
             'controller_name' => 'PagesController',

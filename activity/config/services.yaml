@@ -31,6 +31,6 @@ services:
         public: false
         tags: [{ method: 'ping', name: 'json_rpc_http_server.jsonrpc_method' }]
 
-    App\Method\ParamsMethod:
+    App\Method\GetMethod:
          public: false
-         tags: [{ method: 'params', name: 'json_rpc_http_server.jsonrpc_method' }]
+         tags: [{ method: 'get', name: 'json_rpc_http_server.jsonrpc_method' }]

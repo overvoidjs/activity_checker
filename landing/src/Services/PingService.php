@@ -14,13 +14,13 @@ class PingService
   public function send(){
 
     try {
-
-      $response = $this->client->request('POST', 'http://172.27.0.1:6543/json-rpc', [
+      $response = $this->client->request('POST', 'http://'.$_SERVER['REMOTE_ADDR'].':6543/json-rpc', [
         'json' => [
           "jsonrpc" => "2.0",
           "method" => "ping",
           "params" => [
-            'url'=>$_SERVER['REQUEST_URI']
+            "url"=>$_SERVER['REQUEST_URI'],
+            "key"=>"wowItsSoSecret"
           ],
           "id" => 1
         ]
@@ -32,6 +32,30 @@ class PingService
     }
 
     return TRUE;
+
+  }
+
+  public function get(){
+
+    try {
+      $response = $this->client->request('POST', 'http://'.$_SERVER['REMOTE_ADDR'].':6543/json-rpc', [
+        'json' => [
+          "jsonrpc" => "2.0",
+          "method" => "get",
+          "params" => [
+            "key"=>"wowItsSoSecret"
+          ],
+          "id" => 1
+        ]
+      ]);
+
+    } catch (\Exception $e) {
+      //Как-то обрабатываем
+      //Например восстанавливаемся или отправляем отчет о сбое
+      $response = $e;
+    }
+
+    return $response->getContent();
 
   }
 
